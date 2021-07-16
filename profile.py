@@ -2,7 +2,7 @@ import numpy as np
 from typing import Tuple
 
 class Profile:
-    def __init__(self, name, vectors=np.array([])) -> None:
+    def __init__(self, name, vectors=[]) -> None:
         """
         Initializes a Profile object with a name and a list of descriptor vectors
         (if applicable). 
@@ -15,8 +15,9 @@ class Profile:
             list of already determined descriptor vectors (if applicable)
         """
         self.name = name
-        self.length = vectors.shape[0]
-        self.mean_vector = np.mean(vectors, axis=1)
+        self.length = len(vectors)
+        self.mean_vector = sum(vectors)/len(vectors)
+        self.vectors = vectors
 
     def update(self, dv) -> None:
         """
@@ -29,8 +30,8 @@ class Profile:
             a discriptor vector associated with the profile
         """
         self.mean_vector = (self.mean_vector * self.length + dv) / (self.length + 1)
+        self.vectors.append(dv)
         self.length += 1
-
     
     @property
     def parameters(self) -> Tuple: 
@@ -41,9 +42,9 @@ class Profile:
         --------------
         None
         """
-        return (self.name, self.mean_vector)
+        return (self.name, self.mean_vector, self.vectors)
     
-    def cosine_distance(descriptor1, descriptor2):
-        dot_product = np.dot(descriptor1, descriptor2)
-        cos_dist = 1-(dot_product/(np.linalg.norm(descriptor1)*np.linalg.norm(descriptor2)))
-        return cos_dist
+def cosine_distance(descriptor1, descriptor2):
+    dot_product = np.dot(descriptor1, descriptor2)
+    cos_dist = 1-(dot_product/(np.linalg.norm(descriptor1)*np.linalg.norm(descriptor2)))
+    return cos_dist

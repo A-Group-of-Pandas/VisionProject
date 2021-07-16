@@ -1,4 +1,8 @@
 import cv2
+from detector import Detector
+import matplotlib.pyplot as plt
+from matplotlib.widgets import Button
+import tkinter as tk
 
 
 # def face_detection():
