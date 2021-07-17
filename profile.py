@@ -2,7 +2,7 @@ import numpy as np
 from typing import Tuple
 
 class Profile:
-    def __init__(self, name, vectors=[]) -> None:
+    def __init__(self, name, vectors) -> None:
         """
         Initializes a Profile object with a name and a list of descriptor vectors
         (if applicable). 
@@ -10,14 +10,15 @@ class Profile:
         Parameters:
         ---------------
         name : str
-            name associated with the profile
+            name associapted with the profile
         vectors: np.ndarray
             list of already determined descriptor vectors (if applicable)
         """
         self.name = name
         self.length = len(vectors)
+        self.vecs = vectors
         self.mean_vector = sum(vectors)/len(vectors)
-        self.vectors = vectors
+        
 
     def update(self, dv) -> None:
         """
@@ -30,7 +31,7 @@ class Profile:
             a discriptor vector associated with the profile
         """
         self.mean_vector = (self.mean_vector * self.length + dv) / (self.length + 1)
-        self.vectors.append(dv)
+        self.vecs.append(dv)
         self.length += 1
     
     @property
@@ -42,7 +43,7 @@ class Profile:
         --------------
         None
         """
-        return (self.name, self.mean_vector, self.vectors)
+        return (self.name, self.mean_vector, self.vecs)
     
 def cosine_distance(descriptor1, descriptor2):
     dot_product = np.dot(descriptor1, descriptor2)

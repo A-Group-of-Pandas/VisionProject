@@ -8,13 +8,11 @@ import numpy as np
 from os import listdir
 
 
-
 class Database:
     def __init__(self) -> None:
         self.cutoff_dist = 0.3
         self.profiles = {}
         self.detector = Detector()
-        self.load("database.pkl")
     
     def load(self, file_path):
         with open(file_path, "rb") as f:
@@ -50,7 +48,7 @@ class Database:
         if name in self.profiles.keys():
             self.profiles[name].update(dv)
         else:
-            profile = Profile(name, np.array(dv[None,...]))
+            profile = Profile(name, [dv])
             self.add(profile)
             
     def load_image(self, path_to_image):
